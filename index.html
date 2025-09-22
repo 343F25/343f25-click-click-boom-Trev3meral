@@ -16,9 +16,14 @@
       background-color: wheat;
       border: 0.25rem solid #8EE4D7 ;
     }
+
+    .odd {
+      background-color: #ffeb99; /* highlight odd rows */
+    }
   </style>
 </head>
 <body>
+  <h1 id="boom-text"></h1>
   <table>
     <tbody>
       <tr>
@@ -152,6 +157,7 @@
     let clickCount = 0;
     const clickSound = document.getElementById('click')
     const boomSound = document.getElementById('boom')
+    const boomText = document.getElementById('boom-text')
     let lastSound = clickSound;
 
     // TODO: 1 - make it such that if any table cell is clicked, the onClick function below is executed
@@ -167,9 +173,13 @@
         // boom
         boomSound.play();
         lastSound = boomSound
+
+        boomText.textContent = "BOOM"
       } else {
         clickSound.play();
         lastSound = clickSound
+
+        boomText.textContent = "";
       }
 
       console.log(`ev in onClick ${ev}`)
@@ -177,6 +187,20 @@
       ev.target.style.backgroundColor = "transparent";
       ev.target.style.border = "none";
       ev.target.textContent = "";
+
+      updateOddRows();
+    }
+
+    function updateOddRows() {
+      document.querySelectorAll('tr').forEach(row => {
+        const remainingCells = Array.from(row.querySelectorAll('td'))
+          .filter(td => td.style.border !== "none");
+        if (remainingCells.length % 2 === 1) {
+          row.classList.add("odd");
+        } else {
+          row.classList.remove("odd");
+        }
+      });
     }
   </script>
 </body>
